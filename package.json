@@ -68,6 +68,6 @@
     "vite": "4.0.3"
   },
   "workspaces": [
-    "package/*"
+    "uligaolin"
   ]
 }
