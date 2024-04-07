@@ -141,218 +141,218 @@
 <script>
 import PickerColor from './color-picker.vue'
 export default {
-  components: {
+    components: {
     PickerColor,
-  },
-  props: {
+    },
+    props: {
     placeholder: {
-      type: String,
-      default: '写点什么吧 ~'
+        type: String,
+        default: '写点什么吧 ~'
     },
     // 是否只读
     readOnly: {
-      type: Boolean,
-      default: false
+        type: Boolean,
+        default: false
     },
     // 最大字数限制，-1不限
     maxlength: {
-      type: Number,
-      default: -1
+        type: Number,
+        default: -1
     },
     // 初始模板
     templates: {
-      type: String,
-      default: ''
+        type: String,
+        default: ''
     }
-  },
-  data() {
+    },
+    data() {
     return {
-      formats: {},
-      textColor: '',
-      backgroundColor: '',
-      curColor: 'text'
+        formats: {},
+        textColor: '',
+        backgroundColor: '',
+        curColor: 'text'
     }
-  },
-  onLoad() {
+    },
+    onLoad() {
     // #ifndef MP-BAIDU
     uni.loadFontFace({
-      family: 'Pacifico',
-      source: 'url("https://sungd.github.io/Pacifico.ttf")'
+        family: 'Pacifico',
+        source: 'url("https://sungd.github.io/Pacifico.ttf")'
     })
     // #endif
-  },
-  methods: {
+    },
+    methods: {
     submit(){
         this.editorCtx.getContents({
             success: (e)=> { this.$emit('submit',e.html?e.html:'') }
         })
     },
     onEditorReady() {
-      // #ifdef MP-BAIDU
-      this.editorCtx = requireDynamicLib('editorLib').createEditorContext('editor')
-      // #endif
+        // #ifdef MP-BAIDU
+        this.editorCtx = requireDynamicLib('editorLib').createEditorContext('editor')
+        // #endif
 
-      // #ifdef APP-PLUS || MP-WEIXIN || H5
-      uni
+        // #ifdef APP-PLUS || MP-WEIXIN || H5
+        uni
         .createSelectorQuery()
         .in(this)
         .select('#editor')
         .context((res) => {
-          this.editorCtx = res.context
-          this.$emit('init', this.editorCtx)
-          // 启用preRender方法时会预先渲染templates内容，但是在小程序中会导致页面自动聚焦至富文本的区域
-          if (this.templates) {
+            this.editorCtx = res.context
+            this.$emit('init', this.editorCtx)
+            // 启用preRender方法时会预先渲染templates内容，但是在小程序中会导致页面自动聚焦至富文本的区域
+            if (this.templates) {
             this.preRender()
-          }
+            }
         })
         .exec((result) => {})
-      // #endif
+        // #endif
     },
     preRender() {
-      // 初始化富文本时自带的文字模板
-      this.editorCtx.setContents({
+        // 初始化富文本时自带的文字模板
+        this.editorCtx.setContents({
         html: this.templates
-      })
+        })
     },
     undo() {
-      this.editorCtx.undo()
+        this.editorCtx.undo()
     },
     redo() {
-      this.editorCtx.redo()
+        this.editorCtx.redo()
     },
     format(e) {
-      let { name, value } = e.target.dataset
-      if (!name) return
-      // console.log('==== name :', name)
-      switch (name) {
+        let { name, value } = e.target.dataset
+        if (!name) return
+        // console.log('==== name :', name)
+        switch (name) {
         case 'color':
         case 'background-color':
-          this.curColor = name
-          this.showPicker()
-          break
+            this.curColor = name
+            this.showPicker()
+            break
         default:
-          this.editorCtx.format(name, value)
-          break
-      }
+            this.editorCtx.format(name, value)
+            break
+        }
     },
     showPicker() {
-      this.$refs.colorPicker.open()
+        this.$refs.colorPicker.open()
     },
     confirmColor(e) {
-      switch (this.curColor) {
+        switch (this.curColor) {
         case 'color':
-          this.textColor = e.hex
-          this.editorCtx.format('color', e.hex)
-          break
+            this.textColor = e.hex
+            this.editorCtx.format('color', e.hex)
+            break
         case 'background-color':
-          this.backgroundColor = e.hex
-          this.editorCtx.format('background-color', e.hex)
-          break
-      }
-      // 建议在更改颜色时，插入一个空以重置颜色区块，否则可能会导致颜色切换失效
-      this.editorCtx.insertText({ text: '' })
+            this.backgroundColor = e.hex
+            this.editorCtx.format('background-color', e.hex)
+            break
+        }
+        // 建议在更改颜色时，插入一个空以重置颜色区块，否则可能会导致颜色切换失效
+        this.editorCtx.insertText({ text: '' })
     },
     onStatusChange(e) {
-      this.formats = e.detail
-      // console.log('==== e :', e, this.textColor)
+        this.formats = e.detail
+        // console.log('==== e :', e, this.textColor)
     },
     insertDivider() {
-      this.editorCtx.insertDivider({
+        this.editorCtx.insertDivider({
         success: function() {
-          // console.log('insert divider success')
+            // console.log('insert divider success')
         }
-      })
+        })
     },
     clear() {
-      uni.showModal({
+        uni.showModal({
         title: '清空编辑器',
         content: '确定清空编辑器吗？',
         success: ({ confirm }) => {
-          if (confirm) {
+            if (confirm) {
             this.editorCtx.clear({
-              success: function(res) {
+                success: function(res) {
                 console.log('clear success')
-              }
+                }
             })
-          }
+            }
         }
-      })
+        })
     },
     removeFormat() {
-      uni.showModal({
+        uni.showModal({
         title: '文本格式化',
         content: '确定要清除所选择部分文本块格式吗？',
         showCancel: true,
         success: ({ confirm }) => {
-          if (confirm) {
+            if (confirm) {
             this.editorCtx.removeFormat()
-          }
+            }
         }
-      })
+        })
     },
     insertDate() {
-      const date = new Date()
-      const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
-      this.editorCtx.insertText({ text: formatDate })
+        const date = new Date()
+        const formatDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+        this.editorCtx.insertText({ text: formatDate })
     },
     insertImage() {
-      // #ifdef APP-PLUS || H5
-      uni.chooseImage({
+        // #ifdef APP-PLUS || H5
+        uni.chooseImage({
         // count: 1, // 默认9
         success: (res) => {
-          const { tempFiles } = res
-          // 将文件和编辑器示例抛出，由开发者自行上传和插入图片
-          this.$emit('upinImage', tempFiles, this.editorCtx)
+            const { tempFiles } = res
+            // 将文件和编辑器示例抛出，由开发者自行上传和插入图片
+            this.$emit('upinImage', tempFiles, this.editorCtx)
         },
         fail() {
-          uni.showToast({
+            uni.showToast({
             title: '未授权访问相册权限，请授权后使用',
             icon: 'none'
-          })
+            })
         }
-      })
-      // #endif
+        })
+        // #endif
 
-      // #ifdef MP-WEIXIN
-      // 微信小程序从基础库 2.21.0 开始， wx.chooseImage 停止维护，请使用 uni.chooseMedia 代替。
-      uni.chooseMedia({
+        // #ifdef MP-WEIXIN
+        // 微信小程序从基础库 2.21.0 开始， wx.chooseImage 停止维护，请使用 uni.chooseMedia 代替。
+        uni.chooseMedia({
         // count: 1, // 默认9
         success: (res) => {
-          // 同上chooseImage处理
-          const { tempFiles } = res
-          this.$emit('upinImage', tempFiles, this.editorCtx)
+            // 同上chooseImage处理
+            const { tempFiles } = res
+            this.$emit('upinImage', tempFiles, this.editorCtx)
         },
         fail() {
-          uni.showToast({
+            uni.showToast({
             title: '未授权访问相册权限，请授权后使用',
             icon: 'none'
-          })
+            })
         }
-      })
-      // #endif
+        })
+        // #endif
     },
     onEditorInput(e) {
-      let maxlength = parseInt(this.maxlength)
+        let maxlength = parseInt(this.maxlength)
 
-      this.editorCtx.getContents({
+        this.editorCtx.getContents({
         success: (res) => {
-          let { html, text } = res
-          let textStr = text.replace(/\s/g, '')
+            let { html, text } = res
+            let textStr = text.replace(/\s/g, '')
 
-          if (textStr.length > maxlength && maxlength != -1) {
+            if (textStr.length > maxlength && maxlength != -1) {
             uni.showModal({
-              content: `超过${maxlength}字数啦~`,
-              confirmText: '确定',
-              showCancel: false,
-              success: () => {
+                content: `超过${maxlength}字数啦~`,
+                confirmText: '确定',
+                showCancel: false,
+                success: () => {
                 this.$emit('overMax', { html, text })
-              }
+                }
             })
-          } else {
+            } else {
             this.$emit('input', { html, text })
-          }
+            }
         }
-      })
+        })
     },
     /**
      * 内嵌模板-暂时弃用
@@ -360,17 +360,17 @@ export default {
      * 若内嵌模板的需求呼声很高，我会后续考虑更新扩展该插件功能
      */
     insertTemplate() {
-      let temp = '<div>内嵌模板</div>'
-      this.editorCtx.setContents({ html: temp })
+        let temp = '<div>内嵌模板</div>'
+        this.editorCtx.setContents({ html: temp })
     }
-  }
+    }
 }
 </script>
 
 <style scoped>
 @import './editor-icon.css';
 .wrapper { height: calc(100% - 0rpx); }
-.iconfont { display: inline-block; padding: 16rpx 16rpx; width: 45rpx; height: 45rpx; cursor: pointer; font-size: 20px; }
+.iconfont { display: inline-block; padding:0.49rem; width: 45rpx; height: 45rpx; cursor: pointer; font-size: 20px; }
 
 .toolbar { box-sizing: border-box; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; }
 

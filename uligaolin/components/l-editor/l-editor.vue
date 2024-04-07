@@ -1,5 +1,5 @@
 <template>
-<l-popup ref="pop" height="90vh">
+<l-popup ref="pop" height="auto">
     <template #name>
         <slot name="text" :html="html">
             <view :style="props.styles" style="color:#333;display:flex;font-size:28rpx;">
@@ -37,7 +37,7 @@ const pop = ref(null)
 const html = ref('')
 const emit = defineEmits(['upload','change','submit'])
 const props = defineProps({
-	placeholder: { type: String, default: '请输入内容' },
+    placeholder: { type: String, default: '请输入内容' },
     // 是否只读
     readOnly: { type: Boolean, default: false },
     // 最大字数限制，-1不限
@@ -57,9 +57,9 @@ const props = defineProps({
  * @param {Object} editor 编辑器实例，你可以自定义调用editor实例的方法
  */
 function initEditor(editor) {
-  // 初始化编辑器内容
-  html.value = props.content
-  editor.setContents({ html: props.content })
+    // 初始化编辑器内容
+    html.value = props.content
+    editor.setContents({ html: props.content })
 }
 watch(()=>props.content,()=>{
     if(sp.value && sp.value.editorCtx) {
@@ -74,9 +74,10 @@ watch(()=>props.content,()=>{
  * @param {Object} editorCtx
  */
 function upinImage(tempFiles, editorCtx) {
+    console.log(tempFiles);
     uni.uploadFile({
         url: props.url,
-        filePath: tempFiles[0].tempFilePath,
+        filePath: tempFiles[0].path,
         name: 'file',
         header: props.header,
         success: (res) => {
