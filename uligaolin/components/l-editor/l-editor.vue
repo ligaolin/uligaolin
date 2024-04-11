@@ -1,5 +1,5 @@
 <template>
-<l-popup ref="pop" height="auto">
+<l-popup ref="pop" height="auto" :index="props.index">
     <template #name>
         <slot name="text" :html="html">
             <view :style="props.styles" style="color:#333;display:flex;font-size:28rpx;">
@@ -50,6 +50,8 @@ const props = defineProps({
     url: { type: String, default: '' },
     // 上传请求头信息
     header: { type: Object, default: {} },
+    // 弹出z-index
+    index: { type: [String,Number], default: 1000 },
 })
 
 /**
