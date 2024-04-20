@@ -1,5 +1,5 @@
 <template>
-<l-popup ref="pop" height="auto" :index="props.index">
+<l-popup ref="pop" :height="props.height" :index="props.index">
     <template #name>
         <slot name="text" :html="html">
             <view :style="props.styles" style="color:#333;display:flex;font-size:28rpx;">
@@ -52,6 +52,8 @@ const props = defineProps({
     header: { type: Object, default: {} },
     // 弹出z-index
     index: { type: [String,Number], default: 1000 },
+    // 高度
+    height: { type: [String,Number], default: '92%' },
 })
 
 /**
