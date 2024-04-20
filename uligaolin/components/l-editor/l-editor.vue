@@ -78,7 +78,6 @@ watch(()=>props.content,()=>{
  * @param {Object} editorCtx
  */
 function upinImage(tempFiles, editorCtx) {
-    console.log(tempFiles);
     uni.uploadFile({
         url: props.url,
         filePath: tempFiles[0].path,

@@ -372,10 +372,10 @@ export default {
 
 .toolbar { box-sizing: border-box; font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; }
 
-.editor-wrapper { height: calc(100% - 450rpx); }
+.editor-wrapper { height: calc(100vh - 650rpx); }
 
 .ql-container { border-top: solid 1px #e6e6e6; border-bottom: solid 1px #e6e6e6; box-sizing: border-box; width: 100%; height: 100%; font-size: 16px; line-height: 1.5; padding:20rpx 0 30rpx;background: white;
-overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch; height: 100vh;
+overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;
 }
 
 /deep/ .ql-editor.ql-blank::before { font-style: normal; color: #cccccc; }

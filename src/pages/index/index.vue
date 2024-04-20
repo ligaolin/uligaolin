@@ -12,6 +12,8 @@
     <l-editor content="测试内容" @change="change" @upload="upload" url="https://mall.meibohate.com/api/member/file/uploads" :header="header" />
     <l-upload @change="res=>image=res" url="https://mall.meibohate.com/api/member/file/uploads" :header="header" value="path2"/>
     <l-media :item="{type:'image',path2:'https://mall.meibohate.com/storage/public/images/2023/12/28/lZVE6y9HrweKvMwqXeofFM9r51LbvgKXD9kuwtyH.jpg'}" value="path2"/>
+
+    <l-editor>dd</l-editor>
 </template>
 
 <script setup>
